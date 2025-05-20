@@ -66,6 +66,8 @@ python3 domain_tool.py -d example.com -s you@yourmail.com
 
 This sends an email from `noreply@example.com` to `you@yourmail.com` using `swaks`. Useful for testing whether your spoofed message is delivered, quarantined, or blocked.
 
+![](./assets/example.png)
+
 ## Disclaimer
 
 This tool is intended strictly for **authorized security testing and research purposes only**.
