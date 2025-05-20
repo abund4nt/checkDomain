@@ -1,91 +1,87 @@
-# domainCheck
+# checkDomain 🧠
 
-During many security audits in real environments I have come across the need to analyze the security measures implemented by the domain I am auditing, specifically to review the SPF and DMARC configuration of the domain to see if there is the possibility of spoofing emails.
+checkDomain is a lightweight and straightforward CLI utility for quickly analyzing a domain's email security posture (SPF & DMARC) and testing spoofed email delivery.
 
-This process was a bit tedious because as I am a forgetful person the dig and swaks flags both to check the domain and to spoof the domain in an email, with this I came up with the idea of creating a tool to “automate” this process.
+Designed for security researchers, red teamers, and pentesters, checkDomain helps assess how susceptible an organization is to basic spoofing attacks by checking their DNS protections and simulating an email from a forged sender (e.g., `noreply@target.com`).
 
-<div align="center">
-  <img src="https://i.imgur.com/0JO50XF.png" width="450px" />
-</div>
+---
 
-## Setup
+## 🔍 Overview
 
-To use this tool just install dig + swaks, clone the repository and run it.
+checkDomain allows you to:
 
-```shell
-$ sudo apt install dig swaks
-$ git clone https://github.com/abund4nt/domainCheck/
-$ cd domainCheck
-$ bash domainCheck.sh
+- Retrieve and display SPF records
+- Retrieve and display DMARC records
+- Send a spoofed test email using the target domain
+- Evaluate the ease of email spoofing against a domain
+
+All DNS lookups are performed via the `dnspython` module to ensure compatibility and performance across platforms, eliminating dependency on external binaries like `dig`.
+
+---
+
+## ⚙️ Requirements
+
+- Python 3.x
+- [swaks](https://github.com/jetmore/swaks) (for spoofed email sending)
+- Python dependencies:
+
+```bash
+  pip install dnspython
 ```
 
-## Usage
+---
 
-To check the SPF and DMARC configuration of the domain you must use the -d flag.
+## 🚀 Usage
 
-```shell
-$ bash domaincheck.sh -d rop.ng
-         __             _                
-        /  |_  _  _|/  | \ _ __  _  o __ 
-        \__| |(/_(_|\  |_/(_)|||(_| | | |
-                abund4nt
+```bash
+$ python3 domain_tool.py -h
 
-[+] SPF configuration: 
+usage: domain_tool.py [-h] [-d DOMAIN] [-s RECIPIENT]
 
+Domain analysis and spoofed email sender
 
-[+] DMARC configuration: 
-
-; <<>> DiG 9.18.30-0ubuntu0.24.04.1-Ubuntu <<>> TXT _dmarc.rop.ng
-;_dmarc.rop.ng.                 IN      TXT
+options:
+  -h, --help            show this help message and exit
+  -d DOMAIN, --domain DOMAIN
+                        Target domain for SPF and DMARC analysis
+  -s RECIPIENT, --send RECIPIENT
+                        Recipient email address for spoofed test (sender is noreply@domain)
 ```
 
-As we can see we can see that the previous domain does not have SPF nor DMARC configured, now to spoof the mail we use the -s flag with a random mail plus the domain.
+---
 
-```shell
-$ bash domaincheck.sh -s test@rop.ng
-         __             _                
-        /  |_  _  _|/  | \ _ __  _  o __ 
-        \__| |(/_(_|\  |_/(_)|||(_| | | |
-                abund4nt
+## 🧪 Example Scenarios
 
-[+] Enter the recipient's e-mail address: xxx@xxx.com
-=== Trying ASPMX.L.GOOGLE.com:25...
-=== Connected to ASPMX.L.GOOGLE.com.
-<-  220 mx.google.com ESMTP 586e51a60fabf-2b28f1504ccsi401649fac.13 - gsmtp
- -> EHLO work
-<-  250-mx.google.com at your service, [186.78.3.225]
-<-  250-SIZE 157286400
-<-  250-8BITMIME
-<-  250-STARTTLS
-<-  250-ENHANCEDSTATUSCODES
-<-  250-PIPELINING
-<-  250-CHUNKING
-<-  250 SMTPUTF8
- -> MAIL FROM:<test@rop.ng>
-<-  250 2.1.0 OK 586e51a60fabf-2b28f1504ccsi401649fac.13 - gsmtp
- -> RCPT TO:<xxx@xxx.com>
-<-  250 2.1.5 OK 586e51a60fabf-2b28f1504ccsi401649fac.13 - gsmtp
- -> DATA
-<-  354 Go ahead 586e51a60fabf-2b28f1504ccsi401649fac.13 - gsmtp
- -> Date: Thu, 23 Jan 2025 15:58:19 -0300
- -> To: xxx@xxx.com
- -> From: test@rop.ng
- -> Subject: pwned
- -> Message-Id: <20250123155819.153879@work>
- -> X-Mailer: swaks v20240103.0 jetmore.org/john/code/swaks/
- -> 
- -> Spoofed Test
- -> 
- -> 
- -> .
-<-  250 2.0.0 OK  1737658701 586e51a60fabf-2b28f1504ccsi401649fac.13 - gsmtp
- -> QUIT
-<-  221 2.0.0 closing connection 586e51a60fabf-2b28f1504ccsi401649fac.13 - gsmtp
-=== Connection closed with remote host.
+### 1. Analyze a domain's email protection records
 
-[+]  Mail sent correctly.
+```bash
+python3 domain_tool.py -d example.com
 ```
 
-When entering the email to impersonate we are asked to enter our email, after entering it we press enter and when checking the inbox we can see that it arrives without problems.
+Expected output:
 
-<img src="https://i.imgur.com/zjm8Hha.png">
+```
+[+] SPF: v=spf1 include:example.net include:spf.protection.outlook.com ~all
+[+] DMARC: v=DMARC1; p=none; rua=mailto:dmarc@example.com
+```
+
+### 2. Send a spoofed test email
+
+```bash
+python3 domain_tool.py -d example.com -s you@yourmail.com
+```
+
+This sends an email from `noreply@example.com` to `you@yourmail.com` using `swaks`. Useful for testing whether your spoofed message is delivered, quarantined, or blocked.
+
+---
+
+## 🛡️ Disclaimer
+
+This tool is intended strictly for **authorized security testing and research purposes only**.
+
+**Do not use checkDomain against domains or targets without explicit permission. Misuse may be illegal and unethical.**
+
+---
+
+¿Quieres que también escriba una descripción corta para la sección de GitHub (la que aparece arriba del código) y una lista rápida de etiquetas (`tags`)?
+```
