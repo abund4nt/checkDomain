@@ -4,9 +4,7 @@ checkDomain is a lightweight and straightforward CLI utility for quickly analyzi
 
 Designed for security researchers, red teamers, and pentesters, checkDomain helps assess how susceptible an organization is to basic spoofing attacks by checking their DNS protections and simulating an email from a forged sender (e.g., `noreply@target.com`).
 
----
-
-## 🔍 Overview
+## Overview
 
 checkDomain allows you to:
 
@@ -17,19 +15,16 @@ checkDomain allows you to:
 
 All DNS lookups are performed via the `dnspython` module to ensure compatibility and performance across platforms, eliminating dependency on external binaries like `dig`.
 
----
 
-## ⚙️ Requirements
+## Requirements
 
 - Python 3.x
 - [swaks](https://github.com/jetmore/swaks) (for spoofed email sending)
 - Python dependencies:
 
 ```bash
-  pip install dnspython
+pip install dnspython
 ```
-
----
 
 ## 🚀 Usage
 
@@ -48,9 +43,7 @@ options:
                         Recipient email address for spoofed test (sender is noreply@domain)
 ```
 
----
-
-## 🧪 Example Scenarios
+## Example Scenarios
 
 ### 1. Analyze a domain's email protection records
 
@@ -73,15 +66,8 @@ python3 domain_tool.py -d example.com -s you@yourmail.com
 
 This sends an email from `noreply@example.com` to `you@yourmail.com` using `swaks`. Useful for testing whether your spoofed message is delivered, quarantined, or blocked.
 
----
-
-## 🛡️ Disclaimer
+## Disclaimer
 
 This tool is intended strictly for **authorized security testing and research purposes only**.
 
 **Do not use checkDomain against domains or targets without explicit permission. Misuse may be illegal and unethical.**
-
----
-
-¿Quieres que también escriba una descripción corta para la sección de GitHub (la que aparece arriba del código) y una lista rápida de etiquetas (`tags`)?
-```
