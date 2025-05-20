@@ -1,4 +1,4 @@
-# checkDomain 🧠
+# checkDomain 📧
 
 checkDomain is a lightweight and straightforward CLI utility for quickly analyzing a domain's email security posture (SPF & DMARC) and testing spoofed email delivery.
 
