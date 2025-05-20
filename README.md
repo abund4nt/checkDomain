@@ -70,6 +70,4 @@ This sends an email from `noreply@example.com` to `you@yourmail.com` using `swak
 
 ## Disclaimer
 
-This tool is intended strictly for **authorized security testing and research purposes only**.
-
-**Do not use checkDomain against domains or targets without explicit permission. Misuse may be illegal and unethical.**
+**I am not responsible for misuse of the tool. ⚠️**
